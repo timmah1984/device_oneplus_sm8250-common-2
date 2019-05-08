@@ -192,6 +192,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     ftm_power_config.sh \
     init.adaptive_charging.rc \
+    init.device_extras.rc \
     init.class_main.sh \
     init.crda.sh \
     init.mdm.sh \
@@ -225,6 +226,10 @@ PRODUCT_PACKAGES += \
 # Component overrides
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/misc/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
+
+# DeviceExtras Package
+PRODUCT_PACKAGES += \
+    DeviceExtras
 
 # Display
 PRODUCT_PACKAGES += \
@@ -262,10 +267,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.mapper@2.0.vendor \
     vendor.qti.hardware.display.mapper@3.0.vendor \
     vendor.qti.hardware.display.mapper@4.0.vendor
-
-# Doze
-PRODUCT_PACKAGES += \
-    OnePlusDoze
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -439,7 +440,6 @@ PRODUCT_PACKAGES += \
 
 # tri-state-key
 PRODUCT_PACKAGES += \
-    KeyHandler \
     tri-state-key_daemon
 
 # Update engine
