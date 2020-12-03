@@ -204,6 +204,7 @@ PRODUCT_PACKAGES += \
     init.adaptive_charging.rc \
     init.device_extras.rc \
     init.class_main.sh \
+    init.color.rc \
     init.crda.sh \
     init.mdm.sh \
     init.oem.debug.rc \
@@ -524,6 +525,7 @@ PRODUCT_BOOT_JARS += \
 PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
+# Surface Flinger
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.force_hwc_copy_for_virtual_displays=true \
     ro.surface_flinger.has_HDR_display=true \
@@ -533,3 +535,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.set_touch_timer_ms=200 \
     ro.surface_flinger.use_color_management=true \
     ro.surface_flinger.wcg_composition_dataspace=143261696
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.sf.native_mode=0
