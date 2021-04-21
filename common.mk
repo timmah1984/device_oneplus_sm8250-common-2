@@ -191,6 +191,7 @@ PRODUCT_PACKAGES += \
 # Common init scripts
 PRODUCT_PACKAGES += \
     ftm_power_config.sh \
+    init.adaptive_charging.rc \
     init.class_main.sh \
     init.crda.sh \
     init.cust.rc \
