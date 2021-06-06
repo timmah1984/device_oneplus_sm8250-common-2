@@ -30,10 +30,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.session.MediaSessionLegacyHelper;
+import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -48,6 +50,8 @@ import com.android.internal.os.DeviceKeyHandler;
 import com.android.internal.util.ArrayUtils;
 
 import org.evolution.device.DeviceExtras.Constants;
+
+import vendor.oneplus.hardware.camera.V1_0.IOnePlusCameraProvider;
 
 public class KeyHandler implements DeviceKeyHandler {
 
@@ -77,6 +81,9 @@ public class KeyHandler implements DeviceKeyHandler {
         sSupportedSliderHaptics.put(Constants.KEY_VALUE_NORMAL, -1);
     }
 
+    public static final String CLIENT_PACKAGE_NAME = "com.oneplus.camera";
+    public static final String CLIENT_PACKAGE_PATH = "/data/misc/evolution/client_package_name";
+
     private final Context mContext;
     private final PowerManager mPowerManager;
     private final NotificationManager mNotificationManager;
@@ -89,6 +96,19 @@ public class KeyHandler implements DeviceKeyHandler {
     private int mProximityTimeOut;
     private int mPrevKeyCode = 0;
     private boolean mProximityWakeSupported;
+    private ClientPackageNameObserver mClientObserver;
+    private IOnePlusCameraProvider mProvider;
+
+    private BroadcastReceiver mSystemStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                onDisplayOn();
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                onDisplayOff();
+            }
+        }
+    };
 
     public KeyHandler(Context context) {
         mContext = context;
@@ -102,6 +122,14 @@ public class KeyHandler implements DeviceKeyHandler {
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (mVibrator == null || !mVibrator.hasVibrator()) {
             mVibrator = null;
+        }
+
+        if (PackageUtils.isAvailableApp(CLIENT_PACKAGE_NAME, mContext)) {
+            IntentFilter systemStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            systemStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+            mContext.registerReceiver(mSystemStateReceiver, systemStateFilter);
+            mClientObserver = new ClientPackageNameObserver(CLIENT_PACKAGE_PATH);
+            mClientObserver.startWatching();
         }
     }
 
@@ -186,4 +214,39 @@ public class KeyHandler implements DeviceKeyHandler {
     public boolean canHandleKeyEvent(KeyEvent event) {
         return false;
         }
+
+    private void onDisplayOn() {
+        if (mClientObserver == null) {
+            mClientObserver = new ClientPackageNameObserver(CLIENT_PACKAGE_PATH);
+            mClientObserver.startWatching();
+        }
+    }
+
+    private void onDisplayOff() {
+        if (mClientObserver != null) {
+            mClientObserver.stopWatching();
+            mClientObserver = null;
+        }
+    }
+
+    private class ClientPackageNameObserver extends FileObserver {
+
+        public ClientPackageNameObserver(String file) {
+            super(CLIENT_PACKAGE_PATH, MODIFY);
+        }
+
+        @Override
+        public void onEvent(int event, String file) {
+            String pkgName = Utils.getFileValue(CLIENT_PACKAGE_PATH, "0");
+            if (event == FileObserver.MODIFY) {
+                try {
+                    Log.d(TAG, "client_package " + file + " and " + pkgName);
+                    mProvider = IOnePlusCameraProvider.getService();
+                    mProvider.setPackageName(pkgName);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "setPackageName error", e);
+                }
+            }
+        }
+    }
 }
