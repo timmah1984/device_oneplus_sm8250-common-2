@@ -104,7 +104,7 @@ public class Utils {
             line = br.readLine();
 			if (line != null) {
             line = line.replaceAll(".+= ", "");
-            }			
+            }
         } catch (IOException e) {
             return null;
         } finally {
