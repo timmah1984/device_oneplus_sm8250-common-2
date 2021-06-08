@@ -166,6 +166,18 @@
                     android:name="android.service.quicksettings.action.QS_TILE"/>
             </intent-filter>
         </service>
+		
+        <!-- TTL Tile -->
+        <service
+            android:name=".TTLTileService"
+            android:icon="@drawable/ic_linux"
+            android:label="@string/ttl_tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action
+                    android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
 
         <!-- Search indexing -->
         <provider
