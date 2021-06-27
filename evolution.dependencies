@@ -13,6 +13,13 @@
   },
   {
     "remote"      : "gitlab",
+    "repository"  : "anierin.t.bliss/vendor_google_camera",
+    "branch"      : "master",
+    "clone-depth" : "1",
+    "target_path" : "vendor/google/camera"
+  },
+  {
+    "remote"      : "gitlab",
     "repository"  : "anierin.t.bliss/vendor_oneplus_camera",
     "branch"      : "sm8250",
     "clone-depth" : "1",

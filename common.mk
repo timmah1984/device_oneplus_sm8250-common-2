@@ -28,6 +28,11 @@ ifeq ($(TARGET_SHIPS_OOSCAM),true)
 $(call inherit-product, vendor/oneplus/camera/sm8250/config.mk)
 endif
 
+# Inherit Google Camera packages
+ifeq ($(TARGET_SHIPS_GCAM),true)
+$(call inherit-product, vendor/google/camera/config.mk)
+endif
+
 # Additional native libraries
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/misc/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
