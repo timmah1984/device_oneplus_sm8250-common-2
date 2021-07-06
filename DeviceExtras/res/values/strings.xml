@@ -95,6 +95,11 @@
     <!-- TTL Tile -->
     <string name="ttl_tile_label">Post-Routing TTL</string>
     <string name="ttl_tile_dialog_title">Options</string>
+
+    <!-- USB 2.0 Force FastCharge -->
+    <string name="usb_title">USB</string> 
+    <string name="usb2_fc_title">USB 2.0 Fast Charge</string>
+    <string name="usb2_fc_summary">Force fast charging of up to 900mA in USB 2.0 mode</string>
 	
     <!-- Vibration slider -->
     <string name="category_vibrator">Vibrator</string>
