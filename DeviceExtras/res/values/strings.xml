@@ -96,6 +96,12 @@
     <string name="ttl_tile_label">Post-Routing TTL</string>
     <string name="ttl_tile_dialog_title">Options</string>
 
+    <!-- Touchscreen -->
+    <string name="touchscreen_title">Touchscreen</string>
+    <string name="game_mode_title">Game Mode</string>
+    <string name="game_mode_summary">Force enable 240Hz sampling rate for all applications</string>
+    <string name="game_mode_warning">decreases battery life</string>
+
     <!-- USB 2.0 Force FastCharge -->
     <string name="usb_title">USB</string> 
     <string name="usb2_fc_title">USB 2.0 Fast Charge</string>

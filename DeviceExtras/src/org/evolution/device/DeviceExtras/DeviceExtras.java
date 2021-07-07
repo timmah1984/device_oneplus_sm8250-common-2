@@ -58,12 +58,14 @@ public class DeviceExtras extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener {
 
     public static final String KEY_SETTINGS_PREFIX = "device_setting_";
+    public static final String KEY_CATEGORY_TOUCHSCREEN="touchscreen";
     public static final String KEY_DC_SWITCH = "dc";
     public static final String KEY_HBM_SWITCH = "hbm";
     public static final String KEY_AUTO_HBM_SWITCH = "auto_hbm";
     public static final String KEY_AUTO_HBM_THRESHOLD = "auto_hbm_threshold";
     public static final String KEY_DOZE = "advanced_doze_settings";
     public static final String KEY_FPS_INFO = "fps_info";
+    public static final String KEY_GAME_SWITCH = "game_mode";
     public static final String KEY_USB2_SWITCH = "usb2_fast_charge";
     public static final String KEY_VIBSTRENGTH = "vib_strength";
 
@@ -71,6 +73,7 @@ public class DeviceExtras extends PreferenceFragment
     private static TwoStatePreference mDCModeSwitch;
     private static TwoStatePreference mHBMModeSwitch;
     private static TwoStatePreference mAutoHBMSwitch;
+    private static TwoStatePreference mGameModeSwitch;
     private static TwoStatePreference mUSB2FastChargeModeSwitch;
 
     private static final String SELINUX_CATEGORY = "selinux";
@@ -118,6 +121,15 @@ public class DeviceExtras extends PreferenceFragment
         mAutoHBMSwitch = (TwoStatePreference) findPreference(KEY_AUTO_HBM_SWITCH);
         mAutoHBMSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(DeviceExtras.KEY_AUTO_HBM_SWITCH, false));
         mAutoHBMSwitch.setOnPreferenceChangeListener(this);
+
+        if (getResources().getBoolean(R.bool.config_deviceSupportsHighSampleRate)) {
+        mGameModeSwitch = (TwoStatePreference) findPreference(KEY_GAME_SWITCH);
+        mGameModeSwitch.setEnabled(GameModeSwitch.isSupported());
+        mGameModeSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(DeviceExtras.KEY_GAME_SWITCH, false));
+        mGameModeSwitch.setOnPreferenceChangeListener(new GameModeSwitch());
+        } else {
+            getPreferenceScreen().removePreference((Preference) findPreference(KEY_CATEGORY_TOUCHSCREEN));
+        }
 
         mUSB2FastChargeModeSwitch = (TwoStatePreference) findPreference(KEY_USB2_SWITCH);
         mUSB2FastChargeModeSwitch.setEnabled(USB2FastChargeModeSwitch.isSupported());
